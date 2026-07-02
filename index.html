@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Joey Woo — research in category theory and quantum foundations. Concrete models, preprints, and interactive concept maps." />
+  <meta name="description" content="Joey Woo — category theory and quantum foundations. Concrete models, preprints, and interactive concept maps." />
   <meta name="google-site-verification" content="-gu3NFsRhLgN4wervJXu0iI68wFNmFRY9myqKUGmu70" />
   <title>Joey Woo · Mathematics</title>
 
@@ -17,9 +17,10 @@
 <body>
   <header class="site-header" role="banner">
     <div class="header-inner container">
-      <a class="brand" href="index.html" aria-label="Joey Woo home">
-        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="22"/></g></svg>
+      <!-- Typographic brand (no giant circle) -->
+      <a class="brand" href="index.html" aria-label="Home — Joey Woo">
         <span class="brand-name">Joey Woo</span>
+        <span class="brand-sub">Mathematics</span>
       </a>
 
       <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -30,19 +31,20 @@
         <a href="contact.html" class="cta">Contact</a>
       </nav>
 
-      <div class="header-actions">
-        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">◐</button>
+      <div class="header-links">
+        <a href="https://orcid.org/0009-0008-8888-9495" target="_blank" rel="noopener" class="small muted">ORCID</a>
+        <a href="https://mathoverflow.net/users/511500" target="_blank" rel="noopener" class="small muted">MathOverflow</a>
       </div>
     </div>
   </header>
 
-  <main role="main">
+  <main>
     <section class="hero-outer">
       <div class="hero container split" aria-labelledby="hero-heading">
         <div class="hero-left">
           <p class="eyebrow">Mathematics · Categories · Quantum Foundations</p>
           <h1 id="hero-heading">Cohesion, modality, and the curious geometry of logic</h1>
-          <p class="lede">I construct explicit models where classical and quantum intuitions coexist, clarify obstructions, and explore constructive resolutions.</p>
+          <p class="lede">Concrete categorical models for quantum modalities, obstruction theory, and computational semantics.</p>
 
           <div class="hero-actions">
             <a class="btn primary" href="publications.html">Recent papers</a>
@@ -54,7 +56,6 @@
 
         <aside class="hero-card" aria-hidden="false">
           <div class="hero-card-inner">
-            <div class="hero-accent" aria-hidden="true"></div>
             <p class="card-title">Featured preprint</p>
             <h2 class="paper-title">A Cohesive ∞‑Topos with a Quantum Modality from Finite‑Dimensional C*-Algebras</h2>
             <p class="paper-meta"><a href="https://arxiv.org/abs/2606.02269" target="_blank" rel="noopener">arXiv:2606.02269</a> · 2026</p>
@@ -62,17 +63,13 @@
               <a class="btn tiny" href="https://arxiv.org/abs/2606.02269" target="_blank" rel="noopener">View on arXiv</a>
               <button class="btn tiny outline model-btn" data-model="quantum-geometry">View model</button>
             </div>
-            <p class="card-fineprint">Interactive maps provide a compositional view of the ideas; drag nodes to explore relations.</p>
+            <p class="card-fineprint">Drag nodes in the model to explore concept relations. No data leaves your browser.</p>
           </div>
-
-          <svg class="flourish" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0,48 C40,10 110,10 200,48" fill="none" stroke="rgba(7,18,34,0.06)" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
         </aside>
       </div>
 
       <div class="hero-note container">
-        <small><strong>Interactive models:</strong> concept maps are embedded across the site. Personalization runs locally and only with consent.</small>
+        <small><strong>Interactive models:</strong> concept maps appear across the site; personalization runs locally only with consent.</small>
       </div>
     </section>
 
@@ -80,29 +77,29 @@
       <div class="grid">
         <article class="feature card" data-enhance="true" data-model="research-timeline">
           <h3>Research snapshot</h3>
-          <p>Concrete models of cohesive ∞‑topoi, quantum modalities, and obstruction theory with computational examples.</p>
-          <p class="feature-foot">If you enjoy precise statements, the diagrams will make you smile.</p>
+          <p>Concrete constructions of cohesive ∞‑topoi, quantum modalities, and obstruction theorems.</p>
+          <p class="feature-foot">If you enjoy rigorous statements, try the models — they are deliberately tidy.</p>
           <p><button class="btn outline model-btn" data-model="research-timeline">Open model</button></p>
         </article>
 
         <article class="feature card" data-enhance="true">
           <h3>Publications</h3>
-          <p>Preprints and published work. The site surfaces arXiv and DOI links automatically where available.</p>
-          <p class="feature-foot">Paper titles are long by design — they carry useful density.</p>
+          <p>Preprints and published work; arXiv and DOI links are shown where available and updated automatically.</p>
+          <p class="feature-foot">Paper titles carry useful information — no gimmicks.</p>
           <p><a class="btn ghost" href="publications.html">Browse papers</a></p>
         </article>
 
         <article class="feature card" data-enhance="true">
           <h3>Collaborate</h3>
-          <p>Short consults, joint projects, or longer collaborations. I prefer clarity and rigor; humor is optional.</p>
-          <p class="feature-foot">Pro tip: include a short summary and a claimed lemma in your email.</p>
+          <p>Short consults, joint projects, or long proofs. Send a concise proposal with a clear goal.</p>
+          <p class="feature-foot">Pro tip: include the lemma you want to prove in the first paragraph.</p>
           <p><a class="btn ghost" href="contact.html">Get in touch</a></p>
         </article>
 
         <article class="feature card" data-enhance="true">
           <h3>About</h3>
-          <p>Independent researcher based in Hong Kong working on category theory and quantum foundations.</p>
-          <p class="feature-foot">I try to make complex ideas readable without losing precision.</p>
+          <p>Independent researcher based in Hong Kong; I favor clarity and explicit constructions.</p>
+          <p class="feature-foot">Short bios are preferred — see About for details.</p>
           <p><a class="btn ghost" href="about.html">Read more</a></p>
         </article>
       </div>
@@ -111,29 +108,17 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p class="small muted">© 2026 Joey Woo · <a href="mailto:s202101185@student.cky.edu.hk">Email</a> · <a href="https://orcid.org/0009-0008-8888-9495" target="_blank" rel="noopener">ORCID</a></p>
-      <p class="small muted">Compiled with careful proofs and occasional good tea.</p>
+      <div>
+        <p class="small muted">© 2026 Joey Woo · <a href="mailto:s202101185@student.cky.edu.hk">Email</a></p>
+      </div>
+      <div>
+        <a href="https://orcid.org/0009-0008-8888-9495" target="_blank" rel="noopener" class="small muted">ORCID</a>
+        <span class="sep">·</span>
+        <a href="https://mathoverflow.net/users/511500" target="_blank" rel="noopener" class="small muted">MathOverflow</a>
+      </div>
     </div>
   </footer>
 
   <script src="assets/js/ai-personalizer-full.js" defer></script>
-
-  <script>
-    // theme toggle wiring (keeps UI responsive even if main script loads later)
-    (function(){
-      function setTheme(t){ document.documentElement.setAttribute('data-theme', t); try{ localStorage.setItem('site:theme', t); }catch(e){} }
-      document.getElementById('theme-toggle')?.addEventListener('click', function(){
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
-        setTheme(current === 'light' ? 'dark' : 'light');
-      });
-      // initialize from storage or system
-      const saved = localStorage.getItem('site:theme');
-      if(saved) setTheme(saved);
-      else {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setTheme(prefersDark ? 'dark' : 'light');
-      }
-    })();
-  </script>
 </body>
 </html>
