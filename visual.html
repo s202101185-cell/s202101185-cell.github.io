@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="description" content="Interactive mathematical visualizations by Joey Woo." />
     <title>Visualizations · Joey Woo</title>
     <link rel="stylesheet" href="style.css">
@@ -10,40 +10,83 @@
     <style>
         .viz-container {
             position: relative;
-            width: 100%; height: 500px;
+            width: 100%;
+            height: 500px;
             margin: 1.5rem 0;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--muted-light, #e2e8f0);
             border-radius: 10px;
             overflow: hidden;
-            background: #f8fafc;
+            background: #fcfcfc;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
         }
-        .viz-row {
-            display: flex; gap: 1rem; flex-wrap: wrap;
-        }
-        .viz-col {
-            flex: 1; min-width: 280px;
-        }
-        .viz-tabs {
-            display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;
-        }
+        .viz-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .viz-col { flex: 1; min-width: 280px; }
+        .viz-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .viz-tab {
-            padding: 0.4rem 1rem;
-            background: #f1f5f9; border: 1px solid #cbd5e1;
-            border-radius: 6px; cursor: pointer;
-            font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
             transition: all 0.2s;
         }
         .viz-tab.active {
-            background: var(--accent, #2563eb); color: #fff; border-color: var(--accent, #2563eb);
+            background: var(--accent, #2563eb);
+            color: #fff;
+            border-color: var(--accent, #2563eb);
         }
         canvas { display: block; }
-        .explain-collapse {
-            margin: 1rem 0;
+        .explain-collapse { margin: 1rem 0; }
+        .explain-collapse summary { font-weight: 600; cursor: pointer; }
+
+        /* Diamond button */
+        .diamond-btn {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            z-index: 10;
+            width: 44px;
+            height: 44px;
+            background: var(--accent, #2563eb);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            transform: rotate(45deg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background 0.2s, transform 0.3s, box-shadow 0.2s;
         }
-        .explain-collapse summary {
-            font-weight: 600; cursor: pointer;
+        .diamond-btn span {
+            display: block;
+            transform: rotate(-45deg);
+            font-weight: bold;
+        }
+        .diamond-btn:hover {
+            background: #1d4ed8;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+            transform: rotate(45deg) scale(1.05);
+        }
+        .diamond-btn.applied {
+            background: #dc2626;
         }
     </style>
+    <!-- MathJax for beautiful equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
 <body>
     <nav>
@@ -59,14 +102,12 @@
         <div class="hero-content fade-in">
             <div class="hero-text">
                 <h1>Visual Explorations</h1>
-                <p>Interactive geometry of cohesive ∞‑topoi, quantum modalities, and the obstruction theorem.</p>
+                <p>Interactive geometry of cohesive \(\infty\)-topoi, quantum modalities, and the obstruction theorem.</p>
             </div>
         </div>
     </header>
 
     <main class="container fade-in">
-
-        <!-- Dimension tabs -->
         <div class="viz-tabs" id="dim-tabs">
             <button class="viz-tab active" data-dim="1d">1D</button>
             <button class="viz-tab" data-dim="2d">2D</button>
@@ -74,41 +115,42 @@
             <button class="viz-tab" data-dim="4d">4D</button>
         </div>
 
-        <!-- Panels for each dimension (only active one shown) -->
+        <!-- 1D -->
         <div id="panel-1d">
             <div class="viz-row">
                 <div class="viz-col">
                     <div class="viz-container" id="viz-1d-a"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>Each blue dot is a possible state of a classical system. Drag them to see how the centre comonad collapses them to a single classical point.</p>
+                        <p>Each glowing dot is a possible state of a classical system. Drag them — the centre comonad collapses all states to a single classical point.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
-                        <p>The line represents the Gelfand spectrum of a commutative C*-algebra. Under the centre comonad \(Q^\diamond\), the representable sheaf \(\mathbf{y}_{M_2}\) becomes empty; only commutative algebras survive. This interactive model shows that collapse: all points coalesce into the unique trivial character.</p>
+                        <p>The line represents the Gelfand spectrum of a commutative \(C^*\)-algebra. Under the centre comonad \(Q^\diamond\), the representable sheaf \(\mathbf{y}_{M_2}\) becomes empty; only commutative algebras survive. This interactive model shows that collapse: all points coalesce into the unique trivial character.</p>
                     </details>
                 </div>
                 <div class="viz-col">
                     <div class="viz-container" id="viz-1d-b"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>Adjust the spread of the points with the slider: when the spread is zero, the classical core is a single point—the system has no quantum degrees of freedom left.</p>
+                        <p>Adjust the spread with the slider — when spread is zero, the classical core is a single point, and quantum degrees of freedom vanish.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
-                        <p>The slider parameter \(s\) controls the dimension of the centre. For \(s=0\), the algebra is simple and non‑commutative; the hom‑set \(\Hom(\mathbb{C}, M_n)\) is empty, so the state space collapses to a point. For \(s>0\), multiple commutative summands exist, giving a larger spectrum.</p>
+                        <p>The slider controls the dimension of the centre. For \(s=0\), the algebra is simple and non‑commutative; the hom‑set \(\mathrm{Hom}(\mathbb{C}, M_n)\) is empty, so the state space collapses to a point. For \(s>0\), multiple commutative summands exist, giving a larger spectrum.</p>
                     </details>
                 </div>
             </div>
         </div>
 
+        <!-- 2D -->
         <div id="panel-2d" style="display:none;">
             <div class="viz-row">
                 <div class="viz-col">
                     <div class="viz-container" id="viz-2d-a"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>Pinch‑zoom and drag the diagram. It shows the failure of the diagonal map \(\Delta\) to commute with Day convolution. Toggle the button to see the collapse when the classical core is cartesian.</p>
+                        <p>Pinch‑zoom and drag the diagram. Click the diamond to see how the obstruction flattens when the classical core is cartesian.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
@@ -119,34 +161,35 @@
                     <div class="viz-container" id="viz-2d-b"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>This canvas lets you draw your own diagram. Use it to explore how the obstruction changes when you change the underlying site.</p>
+                        <p>A free‑sketch canvas: draw your own diagram and explore how the obstruction changes.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
-                        <p>A freehand sketch of the precomposition obstruction. The mathematical content is the same as the left diagram, but the open canvas invites the reader to experiment.</p>
+                        <p>The same categorical square, but open for experimentation. The mathematical content is identical to the left panel.</p>
                     </details>
                 </div>
             </div>
         </div>
 
+        <!-- 3D -->
         <div id="panel-3d" style="display:none;">
             <div class="viz-row">
                 <div class="viz-col">
                     <div class="viz-container" id="viz-3d-a"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>Rotate, zoom, and pan the 3D scene. The dark spheres are geometric manifolds; the blue columns are algebraic Hilbert spaces. Click <em>Apply Q</em> to see the quantum comonad project the columns to their commutative core.</p>
+                        <p>Rotate, zoom, and pan the 3D scene. The dark spheres are geometric manifolds; the blue columns are algebraic Hilbert spaces. Click the diamond to see the quantum comonad project the columns to their commutative core.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
-                        <p>\( \mathbf{E} = \Sh(\mathbb{S}, J) \) with \(\mathbb{S} = \Mfd \times \Hilb_{\CP}^{\mathrm{op}}\). The spheres represent objects in \(\Mfd\); the columns represent \(\Hilb_{\CP}^{\mathrm{op}}\). \(Q^\diamond\) acts as \(i_! i^*\) with \(i: \cCAlg_{\CP}^{\mathrm{op}} \hookrightarrow \Hilb_{\CP}^{\mathrm{op}}\), collapsing each column to the classical subcategory.</p>
+                        <p>\(\mathbf{E} = \mathrm{Sh}(\mathbb{S}, J)\) with \(\mathbb{S} = \mathbf{Mfd} \times \mathrm{Hilb}_{\mathrm{CP}}^{\mathrm{op}}\). The spheres represent objects in \(\mathbf{Mfd}\); the columns represent \(\mathrm{Hilb}_{\mathrm{CP}}^{\mathrm{op}}\). \(Q^\diamond\) acts as \(i_! i^*\) with \(i: \mathbf{cCAlg}_{\mathrm{CP}}^{\mathrm{op}} \hookrightarrow \mathrm{Hilb}_{\mathrm{CP}}^{\mathrm{op}}\), collapsing each column to the classical subcategory.</p>
                     </details>
                 </div>
                 <div class="viz-col">
                     <div class="viz-container" id="viz-3d-b"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>Another view: a torus knot (representing a mixed distributive law) rotates in space. You can twist it from every angle.</p>
+                        <p>A torus knot representing the mixed distributive law — twist it from every angle.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
@@ -156,13 +199,14 @@
             </div>
         </div>
 
+        <!-- 4D -->
         <div id="panel-4d" style="display:none;">
             <div class="viz-row">
                 <div class="viz-col">
                     <div class="viz-container" id="viz-4d-a"></div>
                     <details class="explain-collapse">
                         <summary>What this shows (plain English)</summary>
-                        <p>A tesseract (4D hypercube) rotating. The coloured edges show how the distributive law \(\lambda\) maps one monad–comonad pair to the other.</p>
+                        <p>A tesseract (4D hypercube) rotating. The coloured edges show how the distributive law \(\lambda\) maps one monad‑comonad pair to the other.</p>
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
@@ -177,12 +221,11 @@
                     </details>
                     <details class="explain-collapse">
                         <summary>Mathematical description</summary>
-                        <p>The inverse \(\lambda^{-1} = \psi^{-1}\otimes\id\) is constructed from the inverse entwining \(\psi^{-1}(\delta_y\otimes g)=g\otimes\delta_{g^{-1}yg}\). This tesseract visualises the symmetry.</p>
+                        <p>The inverse \(\lambda^{-1} = \psi^{-1}\otimes\mathrm{id}\) is constructed from the inverse entwining \(\psi^{-1}(\delta_y\otimes g)=g\otimes\delta_{g^{-1}yg}\). This tesseract visualises the symmetry.</p>
                     </details>
                 </div>
             </div>
         </div>
-
     </main>
 
     <footer>
@@ -192,14 +235,13 @@
         </p>
     </footer>
 
-    <!-- Three.js and OrbitControls (loaded globally) -->
+    <!-- Three.js and OrbitControls -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.126.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.126.0/examples/js/controls/OrbitControls.js"></script>
     <script src="assets/js/ai-enhancer.js" defer></script>
 
     <script>
-    (function(){
-        // ---- tab switching ----
+    (function() {
         const dimTabs = document.querySelectorAll('#dim-tabs .viz-tab');
         const panels = {
             '1d': document.getElementById('panel-1d'),
@@ -214,161 +256,171 @@
             if (dim === activeDim) return;
             panels[activeDim].style.display = 'none';
             panels[dim].style.display = 'block';
-            // stop any running Three.js render loops and dispose resources
             threeJSCleanups.forEach(fn => fn());
             threeJSCleanups = [];
             dimTabs.forEach(t => t.classList.remove('active'));
             document.querySelector(`#dim-tabs .viz-tab[data-dim="${dim}"]`).classList.add('active');
             activeDim = dim;
-            // initialise the new dimension
             switch(dim) {
-                case '1d': init1D(); break;
-                case '2d': init2D(); break;
-                case '3d': init3D(); break;
-                case '4d': init4D(); break;
+                case '1d': setTimeout(init1D, 50); break;
+                case '2d': setTimeout(init2D, 50); break;
+                case '3d': setTimeout(init3D, 50); break;
+                case '4d': setTimeout(init4D, 50); break;
             }
         }
+        dimTabs.forEach(tab => tab.addEventListener('click', () => switchDim(tab.dataset.dim)));
 
-        dimTabs.forEach(tab => {
-            tab.addEventListener('click', () => switchDim(tab.dataset.dim));
-        });
-
-        // ----- 1D visualizations (draggable points) -----
-        function init1D() {
-            ['viz-1d-a', 'viz-1d-b'].forEach(containerId => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = ''; // clear previous
-                const canvas = document.createElement('canvas');
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
-                container.appendChild(canvas);
-                const ctx = canvas.getContext('2d');
-                let width, height;
-                function resize() {
-                    width = container.clientWidth;
-                    height = container.clientHeight;
-                    canvas.width = width;
-                    canvas.height = height;
-                    draw();
-                }
-                window.addEventListener('resize', resize);
-                resize();
-
-                // points (draggable)
-                let points = [];
-                if (containerId === 'viz-1d-a') {
-                    // fixed points that snap to centre on toggle
-                    const numPts = 7;
-                    for (let i = 0; i < numPts; i++) {
-                        points.push({ x: width * (0.1 + 0.12*i), collapsed: false });
-                    }
-                    const toggleBtn = document.createElement('button');
-                    toggleBtn.textContent = 'Collapse (apply Q)';
-                    toggleBtn.className = 'viz-tab';
-                    toggleBtn.style.position = 'absolute';
-                    toggleBtn.style.bottom = '10px';
-                    toggleBtn.style.left = '10px';
-                    toggleBtn.style.zIndex = '10';
-                    container.appendChild(toggleBtn);
-                    toggleBtn.addEventListener('click', () => {
-                        points.forEach(p => p.collapsed = !p.collapsed);
-                        draw();
-                    });
-                } else {
-                    // slider controlled spread
-                    const slider = document.createElement('input');
-                    slider.type = 'range'; slider.min = 0; slider.max = 1; slider.step = 0.01; slider.value = 0.5;
-                    slider.style.position = 'absolute'; slider.style.bottom = '10px'; slider.style.left = '10px';
-                    slider.style.width = '150px';
-                    container.appendChild(slider);
-                    const numPts = 9;
-                    function updatePoints() {
-                        const s = parseFloat(slider.value);
-                        points = [];
-                        for (let i = 0; i < numPts; i++) {
-                            points.push({ baseX: width*(0.1 + 0.1*i), currentX: width*(0.1 + 0.1*i*(1-s)) });
-                        }
-                        draw();
-                    }
-                    slider.addEventListener('input', updatePoints);
-                    updatePoints();
-                }
-
-                let dragging = -1;
-                canvas.addEventListener('mousedown', e => {
-                    const rect = canvas.getBoundingClientRect();
-                    const mx = e.clientX - rect.left;
-                    const my = e.clientY - rect.top;
-                    for (let i = 0; i < points.length; i++) {
-                        const dx = mx - points[i].currentX;
-                        const dy = my - height/2;
-                        if (Math.sqrt(dx*dx+dy*dy) < 15) { dragging = i; break; }
-                    }
-                });
-                canvas.addEventListener('mousemove', e => {
-                    if (dragging < 0) return;
-                    const rect = canvas.getBoundingClientRect();
-                    points[dragging].currentX = e.clientX - rect.left;
-                    draw();
-                });
-                canvas.addEventListener('mouseup', () => { dragging = -1; });
-                // touch
-                canvas.addEventListener('touchstart', e => {
-                    e.preventDefault();
-                    const rect = canvas.getBoundingClientRect();
-                    const mx = e.touches[0].clientX - rect.left;
-                    const my = e.touches[0].clientY - rect.top;
-                    for (let i = 0; i < points.length; i++) {
-                        const dx = mx - points[i].currentX;
-                        const dy = my - height/2;
-                        if (Math.sqrt(dx*dx+dy*dy) < 15) { dragging = i; break; }
-                    }
-                });
-                canvas.addEventListener('touchmove', e => {
-                    e.preventDefault();
-                    if (dragging < 0) return;
-                    const rect = canvas.getBoundingClientRect();
-                    points[dragging].currentX = e.touches[0].clientX - rect.left;
-                    draw();
-                });
-                canvas.addEventListener('touchend', () => { dragging = -1; });
-
-                function draw() {
-                    ctx.clearRect(0,0,width,height);
-                    ctx.fillStyle = '#0f172a';
-                    ctx.font = '12px Inter, sans-serif';
-                    ctx.fillText(containerId==='viz-1d-a'?'Spectrum collapse':'Spectrum spread', 10, 20);
-                    ctx.beginPath();
-                    ctx.moveTo(40, height/2); ctx.lineTo(width-40, height/2);
-                    ctx.strokeStyle = '#cbd5e1'; ctx.stroke();
-                    points.forEach(p => {
-                        const x = containerId==='viz-1d-a' ? (p.collapsed ? width/2 : p.x) : p.currentX;
-                        ctx.beginPath();
-                        ctx.arc(x, height/2, 7, 0, 2*Math.PI);
-                        ctx.fillStyle = '#2563eb';
-                        ctx.fill();
-                    });
-                }
-            });
+        // Helper to create a diamond button
+        function createDiamondBtn(parent, label, onClick) {
+            const btn = document.createElement('button');
+            btn.className = 'diamond-btn';
+            const span = document.createElement('span');
+            span.textContent = label;
+            btn.appendChild(span);
+            btn.addEventListener('click', onClick);
+            parent.appendChild(btn);
+            return btn;
         }
 
-        // ----- 2D visualizations (pan/zoom canvas) -----
-        function init2D() {
-            function setup2D(containerId) {
+        // ----- 1D – refined with animation and tooltips -----
+        function init1D() {
+            function initSpectrum(containerId, type) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
                 const canvas = document.createElement('canvas');
                 canvas.style.width = '100%'; canvas.style.height = '100%';
                 container.appendChild(canvas);
                 const ctx = canvas.getContext('2d');
-                let width, height;
-                function resize() { width = container.clientWidth; height = container.clientHeight; canvas.width = width; canvas.height = height; draw(); }
+                let w, h;
+                const resize = () => {
+                    w = container.clientWidth; h = container.clientHeight;
+                    canvas.width = w; canvas.height = h; draw();
+                };
                 window.addEventListener('resize', resize);
                 resize();
-                // transform for pan/zoom
-                let tx = 0, ty = 0, scale = 1;
+
+                let points = [];
+                let animFrame;
+                if (type === 'collapse') {
+                    const numPts = 7;
+                    for (let i=0; i<numPts; i++) {
+                        const baseX = w * (0.1 + 0.12*i);
+                        points.push({ baseX, x: baseX, targetX: baseX, collapsed: false });
+                    }
+                    createDiamondBtn(container, '◆', () => {
+                        points.forEach(p => { p.collapsed = !p.collapsed; p.targetX = p.collapsed ? w/2 : p.baseX; });
+                        if (!animFrame) animate();
+                    });
+                } else {
+                    const slider = document.createElement('input');
+                    slider.type = 'range'; slider.min = 0; slider.max = 1; slider.step = 0.01; slider.value = 0.5;
+                    slider.style.position = 'absolute'; slider.style.bottom = '16px'; slider.style.left = '16px'; slider.style.width = '120px';
+                    container.appendChild(slider);
+                    const update = () => {
+                        const s = parseFloat(slider.value);
+                        points = [];
+                        for (let i=0; i<9; i++) {
+                            const baseX = w * (0.1 + 0.1*i);
+                            points.push({ baseX, x: baseX + (w/2 - baseX)*s, targetX: baseX + (w/2 - baseX)*s });
+                        }
+                        draw();
+                    };
+                    slider.addEventListener('input', update);
+                    update();
+                }
+
+                function animate() {
+                    let allDone = true;
+                    points.forEach(p => {
+                        const dx = p.targetX - p.x;
+                        if (Math.abs(dx) > 0.5) { p.x += dx*0.1; allDone = false; }
+                        else p.x = p.targetX;
+                    });
+                    draw();
+                    if (!allDone) animFrame = requestAnimationFrame(animate);
+                    else animFrame = null;
+                }
+
+                let draggingIdx = -1;
+                function hitTest(mx, my) {
+                    for (let i=0; i<points.length; i++) {
+                        const dx = mx - points[i].x, dy = my - h/2;
+                        if (Math.sqrt(dx*dx+dy*dy) < 15) return i;
+                    }
+                    return -1;
+                }
+                canvas.addEventListener('mousedown', e => {
+                    const rect = canvas.getBoundingClientRect();
+                    const idx = hitTest(e.clientX-rect.left, e.clientY-rect.top);
+                    if (idx >= 0) { draggingIdx = idx; points[idx].targetX = points[idx].x; }
+                });
+                canvas.addEventListener('mousemove', e => {
+                    if (draggingIdx < 0) return;
+                    const rect = canvas.getBoundingClientRect();
+                    points[draggingIdx].x = e.clientX - rect.left;
+                    points[draggingIdx].targetX = points[draggingIdx].x;
+                    draw();
+                });
+                canvas.addEventListener('mouseup', () => { draggingIdx = -1; });
+                canvas.addEventListener('touchstart', e => {
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    const idx = hitTest(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top);
+                    if (idx >= 0) { draggingIdx = idx; points[idx].targetX = points[idx].x; }
+                });
+                canvas.addEventListener('touchmove', e => {
+                    e.preventDefault();
+                    if (draggingIdx < 0) return;
+                    const rect = canvas.getBoundingClientRect();
+                    points[draggingIdx].x = e.touches[0].clientX - rect.left;
+                    points[draggingIdx].targetX = points[draggingIdx].x;
+                    draw();
+                });
+                canvas.addEventListener('touchend', () => { draggingIdx = -1; });
+
+                function draw() {
+                    ctx.clearRect(0,0,w,h);
+                    const grad = ctx.createLinearGradient(0,0,0,h);
+                    grad.addColorStop(0, '#fafbfc'); grad.addColorStop(1, '#e2e8f0');
+                    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+                    ctx.beginPath();
+                    ctx.moveTo(50, h/2); ctx.lineTo(w-50, h/2);
+                    ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.stroke();
+                    points.forEach(p => {
+                        ctx.beginPath();
+                        ctx.arc(p.x, h/2, 7, 0, 2*Math.PI);
+                        const g = ctx.createRadialGradient(p.x, h/2, 2, p.x, h/2, 8);
+                        g.addColorStop(0, '#93c5fd'); g.addColorStop(1, '#1e40af');
+                        ctx.fillStyle = g; ctx.fill();
+                        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+                    });
+                    ctx.fillStyle = '#334155'; ctx.font = '12px Inter'; ctx.fillText(type==='collapse'?'Spectrum collapse':'Spectrum spread', 60, 30);
+                }
+            }
+            initSpectrum('viz-1d-a', 'collapse');
+            initSpectrum('viz-1d-b', 'spread');
+        }
+
+        // ----- 2D -----
+        function init2D() {
+            function setup2D(containerId, withToggle) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                const canvas = document.createElement('canvas');
+                canvas.style.width = '100%'; canvas.style.height = '100%';
+                container.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+                let w, h, tx=0, ty=0, scale=1;
+                let collapsed = false;
+                const resize = () => { w = container.clientWidth; h = container.clientHeight; canvas.width = w; canvas.height = h; draw(); };
+                window.addEventListener('resize', resize);
+                resize();
+
+                if (withToggle) {
+                    createDiamondBtn(container, '◆', () => { collapsed = !collapsed; draw(); });
+                }
+
                 let dragging = false, lastX, lastY;
-                function toWorld(sx, sy) { return { x: (sx-tx)/scale, y: (sy-ty)/scale }; }
                 canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
                 canvas.addEventListener('mousemove', e => {
                     if (!dragging) return;
@@ -387,7 +439,6 @@
                     scale *= factor;
                     draw();
                 });
-                // touch
                 canvas.addEventListener('touchstart', e => {
                     if (e.touches.length === 1) { dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
                 });
@@ -402,96 +453,111 @@
                 canvas.addEventListener('touchend', () => { dragging = false; });
 
                 function draw() {
-                    ctx.clearRect(0,0,width,height);
-                    ctx.save();
-                    ctx.translate(tx, ty); ctx.scale(scale, scale);
-                    ctx.fillStyle = '#0f172a'; ctx.font = '12px Inter, sans-serif';
-                    ctx.fillText('Precomposition Obstruction', 20, 20);
-                    // nodes
-                    const nodes = [
-                        {x:100,y:100,label:'Δ'},{x:300,y:100,label:'Q(X×Y)'},
-                        {x:100,y:300,label:'QX⊗QY'},{x:300,y:300,label:'X×Y'}
-                    ];
-                    nodes.forEach(n => {
-                        ctx.beginPath(); ctx.arc(n.x, n.y, 10, 0, 2*Math.PI);
+                    ctx.clearRect(0,0,w,h);
+                    const grad = ctx.createLinearGradient(0,0,0,h);
+                    grad.addColorStop(0, '#fafbfc'); grad.addColorStop(1, '#e2e8f0');
+                    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+                    ctx.save(); ctx.translate(tx, ty); ctx.scale(scale, scale);
+                    ctx.fillStyle = '#334155'; ctx.font = '12px Inter'; ctx.fillText('Precomposition Obstruction', 20, 20);
+                    const tL = {x:100,y:100,label:'Δ'};
+                    const tR = {x:300,y:100,label: collapsed ? 'X×Y' : 'Q(X×Y)'};
+                    const bL = {x:100,y:300,label:'QX⊗QY'};
+                    const bR = {x:300,y:300,label: collapsed ? 'X×Y/Q(X×Y)' : 'X×Y'};
+                    [tL,tR,bL,bR].forEach(n => {
+                        ctx.beginPath(); ctx.arc(n.x, n.y, 9, 0, 2*Math.PI);
                         ctx.fillStyle = '#2563eb'; ctx.fill();
-                        ctx.fillStyle = '#fff'; ctx.font='bold 10px Inter';
-                        ctx.fillText(n.label, n.x-8, n.y-12);
+                        ctx.fillStyle = '#fff'; ctx.font = 'bold 10px Inter'; ctx.fillText(n.label, n.x-12, n.y-14);
                     });
-                    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
-                    ctx.beginPath(); ctx.moveTo(100,100); ctx.lineTo(300,100); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(100,100); ctx.lineTo(100,300); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(100,300); ctx.lineTo(300,300); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(300,100); ctx.lineTo(300,300); ctx.stroke();
+                    function arrow(x1,y1,x2,y2) {
+                        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+                        ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.5; ctx.stroke();
+                        const angle = Math.atan2(y2-y1, x2-x1);
+                        const len = 6;
+                        ctx.beginPath();
+                        ctx.moveTo(x2, y2);
+                        ctx.lineTo(x2 - len*Math.cos(angle - Math.PI/6), y2 - len*Math.sin(angle - Math.PI/6));
+                        ctx.lineTo(x2 - len*Math.cos(angle + Math.PI/6), y2 - len*Math.sin(angle + Math.PI/6));
+                        ctx.closePath();
+                        ctx.fillStyle = '#64748b'; ctx.fill();
+                    }
+                    arrow(100,100, 300,100);
+                    arrow(100,100, 100,300);
+                    arrow(100,300, 300,300);
+                    if (!collapsed) arrow(300,100, 300,300);
                     ctx.restore();
                 }
             }
-            setup2D('viz-2d-a');
-            setup2D('viz-2d-b');
+            setup2D('viz-2d-a', true);
+            setup2D('viz-2d-b', false);
         }
 
-        // ----- 3D visualizations (Three.js + OrbitControls) -----
+        // ----- 3D -----
         function init3D() {
-            function createScene(containerId, geometryType) {
+            function createScene(containerId, type) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
                 const scene = new THREE.Scene();
                 scene.background = new THREE.Color('#f8fafc');
-                const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 100);
-                camera.position.set(5,5,8);
+                const cam = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 100);
+                cam.position.set(5,5,8);
                 const renderer = new THREE.WebGLRenderer({antialias: true});
                 renderer.setSize(container.clientWidth, container.clientHeight);
                 container.appendChild(renderer.domElement);
-                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                const controls = new THREE.OrbitControls(cam, renderer.domElement);
                 controls.enableDamping = true;
-                scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-                const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                dirLight.position.set(1,1,1); scene.add(dirLight);
-                if (geometryType === 'site') {
-                    const grid = 3, sp = 2;
-                    const spheres = [];
-                    for (let i=0;i<grid;i++) for(let j=0;j<grid;j++){
-                        const s = new THREE.Mesh(new THREE.SphereGeometry(0.3,16,16), new THREE.MeshStandardMaterial({color:'#0f172a'}));
-                        s.position.set((i-1)*sp,0,(j-1)*sp); scene.add(s); spheres.push(s);
+                scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+                const dir = new THREE.DirectionalLight(0xffffff, 0.8); dir.position.set(1,1,1); scene.add(dir);
+
+                if (type === 'site') {
+                    const grid=3, sp=2;
+                    const sphereMat = new THREE.MeshStandardMaterial({color: '#0f172a', roughness: 0.3, metalness: 0.1});
+                    for (let i=0;i<grid;i++) for (let j=0;j<grid;j++) {
+                        const s = new THREE.Mesh(new THREE.SphereGeometry(0.4,32,32), sphereMat);
+                        s.position.set((i-1)*sp, 0, (j-1)*sp); scene.add(s);
                     }
                     const columns = [];
-                    for (let i=0;i<grid;i++) for(let j=0;j<grid;j++){
+                    const boxMat = new THREE.MeshStandardMaterial({color: '#2563eb', roughness: 0.15, metalness: 0.2, transparent: true, opacity: 1});
+                    for (let i=0;i<grid;i++) for (let j=0;j<grid;j++) {
                         const group = new THREE.Group();
-                        for(let y=0;y<3;y++){
-                            const box = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.4,0.4), new THREE.MeshStandardMaterial({color:'#2563eb'}));
-                            box.position.set((i-1)*sp, y*0.8+0.4, (j-1)*sp); group.add(box);
+                        for (let y=0; y<3; y++) {
+                            const box = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.4,0.4), boxMat);
+                            box.position.set((i-1)*sp, y*0.8+0.4, (j-1)*sp);
+                            group.add(box);
                         }
-                        scene.add(group); columns.push({group, origY: group.children.map(c=>c.position.y)});
+                        scene.add(group);
+                        columns.push({ group, origY: group.children.map(c=>c.position.y) });
                     }
-                    const btn = document.createElement('button'); btn.textContent='Apply Q'; btn.className='viz-tab';
-                    btn.style.position='absolute'; btn.style.bottom='10px'; btn.style.left='10px'; btn.style.zIndex='10';
-                    container.appendChild(btn);
-                    let applied = false;
-                    btn.addEventListener('click',()=>{
-                        applied=!applied;
-                        columns.forEach(col=>col.group.children.forEach((box,idx)=>box.position.y=applied?0:col.origY[idx]));
+                    const btn = createDiamondBtn(container, '◆', () => {
+                        const applied = btn.classList.toggle('applied');
+                        columns.forEach(col => {
+                            col.group.children.forEach(box => {
+                                box.material.opacity = applied ? 0 : 1;
+                            });
+                        });
                     });
-                } else if (geometryType === 'torus') {
-                    const curve = new THREE.TorusKnotGeometry(1.5,0.4,100,16);
-                    const mesh = new THREE.Mesh(curve, new THREE.MeshStandardMaterial({color:'#2563eb', roughness:0.4, metalness:0.2}));
-                    scene.add(mesh);
+                } else {
+                    const geo = new THREE.TorusKnotGeometry(1.5, 0.4, 128, 16);
+                    const mat = new THREE.MeshStandardMaterial({color: '#2563eb', roughness: 0.25, metalness: 0.5});
+                    const knot = new THREE.Mesh(geo, mat);
+                    scene.add(knot);
                 }
+
                 function animate() {
                     const id = requestAnimationFrame(animate);
                     controls.update();
-                    renderer.render(scene, camera);
+                    renderer.render(scene, cam);
                     return id;
                 }
                 const animId = animate();
-                function cleanup() {
+                const cleanup = () => {
                     cancelAnimationFrame(animId);
                     renderer.dispose();
-                    scene.traverse(obj => { if (obj.geometry) obj.geometry.dispose(); if (obj.material) obj.material.dispose(); });
-                }
+                    scene.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+                };
                 threeJSCleanups.push(cleanup);
                 window.addEventListener('resize', () => {
-                    camera.aspect = container.clientWidth/container.clientHeight;
-                    camera.updateProjectionMatrix();
+                    cam.aspect = container.clientWidth/container.clientHeight;
+                    cam.updateProjectionMatrix();
                     renderer.setSize(container.clientWidth, container.clientHeight);
                 });
             }
@@ -499,67 +565,84 @@
             createScene('viz-3d-b', 'torus');
         }
 
-        // ----- 4D visualizations (tesseract with controls) -----
+        // ----- 4D -----
         function init4D() {
             function createTesseract(containerId, color) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
-                const scene = new THREE.Scene(); scene.background = new THREE.Color('#f8fafc');
-                const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 100);
-                camera.position.set(4,4,6);
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color('#f8fafc');
+                const cam = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 100);
+                cam.position.set(4,4,6);
                 const renderer = new THREE.WebGLRenderer({antialias: true});
                 renderer.setSize(container.clientWidth, container.clientHeight);
                 container.appendChild(renderer.domElement);
-                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                const controls = new THREE.OrbitControls(cam, renderer.domElement);
                 controls.enableDamping = true;
-                scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-                const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                dirLight.position.set(1,1,1); scene.add(dirLight);
-                // 4D vertices
+                scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+                const dir = new THREE.DirectionalLight(0xffffff, 0.8); dir.position.set(1,1,1); scene.add(dir);
+
                 const verts4D = [];
-                for(let i=0;i<16;i++){ const b=[(i>>3)&1,(i>>2)&1,(i>>1)&1,i&1].map(v=>v*2-1); verts4D.push(new THREE.Vector4(b[0],b[1],b[2],b[3])); }
-                const edges = [];
-                for(let i=0;i<16;i++) for(let j=i+1;j<16;j++){
-                    const diff = [0,1,2,3].filter(k=>verts4D[i].getComponent(k)!==verts4D[j].getComponent(k));
-                    if(diff.length===1) edges.push([i,j]);
+                for (let i=0;i<16;i++) {
+                    const b = [(i>>3)&1, (i>>2)&1, (i>>1)&1, i&1].map(v=>v*2-1);
+                    verts4D.push(new THREE.Vector4(b[0], b[1], b[2], b[3]));
                 }
-                const lineGeo = new THREE.BufferGeometry();
-                const positions = new Float32Array(edges.length*2*3);
-                lineGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-                const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({color: color||'#2563eb'}));
+                const edges = [];
+                for (let i=0;i<16;i++) for (let j=i+1;j<16;j++) {
+                    const diff = [0,1,2,3].filter(k => verts4D[i].getComponent(k) !== verts4D[j].getComponent(k));
+                    if (diff.length === 1) edges.push([i,j]);
+                }
+                // Edges
+                const edgeGeo = new THREE.BufferGeometry();
+                const pos = new Float32Array(edges.length*2*3);
+                edgeGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const lines = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({color: color||'#2563eb'}));
                 scene.add(lines);
+                // Vertices
+                const dotGeo = new THREE.SphereGeometry(0.08, 8, 8);
+                const dotMat = new THREE.MeshStandardMaterial({color: color||'#2563eb', roughness: 0.3});
+                const dots = verts4D.map(() => {
+                    const dot = new THREE.Mesh(dotGeo, dotMat); scene.add(dot); return dot;
+                });
+
                 function project4D(v, angle) {
                     const cos = Math.cos(angle), sin = Math.sin(angle);
                     const y = v.y*cos - v.w*sin, w = v.y*sin + v.w*cos;
                     const scale = 1/(3+w);
                     return new THREE.Vector3(v.x*scale, y*scale, v.z*scale);
                 }
+
                 let angle = 0;
                 function animate() {
                     const id = requestAnimationFrame(animate);
                     angle += 0.005;
                     const arr = lines.geometry.attributes.position.array;
                     let idx=0;
-                    edges.forEach(([i,j])=>{
+                    edges.forEach(([i,j]) => {
                         const p1 = project4D(verts4D[i], angle), p2 = project4D(verts4D[j], angle);
-                        arr[idx++]=p1.x; arr[idx++]=p1.y; arr[idx++]=p1.z;
-                        arr[idx++]=p2.x; arr[idx++]=p2.y; arr[idx++]=p2.z;
+                        arr[idx]=p1.x; arr[idx+1]=p1.y; arr[idx+2]=p1.z;
+                        arr[idx+3]=p2.x; arr[idx+4]=p2.y; arr[idx+5]=p2.z;
+                        idx+=6;
                     });
                     lines.geometry.attributes.position.needsUpdate = true;
+                    dots.forEach((dot, i) => {
+                        const p = project4D(verts4D[i], angle);
+                        dot.position.copy(p);
+                    });
                     controls.update();
-                    renderer.render(scene, camera);
+                    renderer.render(scene, cam);
                     return id;
                 }
                 const animId = animate();
-                function cleanup() {
+                const cleanup = () => {
                     cancelAnimationFrame(animId);
                     renderer.dispose();
-                    scene.traverse(obj => { if (obj.geometry) obj.geometry.dispose(); if (obj.material) obj.material.dispose(); });
-                }
+                    scene.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+                };
                 threeJSCleanups.push(cleanup);
                 window.addEventListener('resize', () => {
-                    camera.aspect = container.clientWidth/container.clientHeight;
-                    camera.updateProjectionMatrix();
+                    cam.aspect = container.clientWidth/container.clientHeight;
+                    cam.updateProjectionMatrix();
                     renderer.setSize(container.clientWidth, container.clientHeight);
                 });
             }
@@ -567,8 +650,13 @@
             createTesseract('viz-4d-b', '#dc2626');
         }
 
-        // Initialise the default dimension
-        init1D();
+        setTimeout(init1D, 100);
+        // MathJax reprocess on toggle
+        document.body.addEventListener('toggle', e => {
+            if (e.target.tagName === 'DETAILS' && e.target.open && typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise([e.target]);
+            }
+        });
     })();
     </script>
 </body>
